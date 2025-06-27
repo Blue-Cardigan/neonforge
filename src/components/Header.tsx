@@ -1,10 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Zap, Github, Download, Play } from 'lucide-react'
+import { Zap, Github, Download, Play, Plus } from 'lucide-react'
 import { useAppStore } from '../store'
 
 const Header: React.FC = () => {
-  const { isContainerReady, serverUrl } = useAppStore()
+  const { isContainerReady, serverUrl, setShowNewProjectModal } = useAppStore()
 
   return (
     <motion.header
@@ -37,6 +37,16 @@ const Header: React.FC = () => {
       </div>
 
       <div className="flex items-center space-x-3">
+        <motion.button
+          whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(255, 0, 255, 0.5)' }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowNewProjectModal(true)}
+          className="btn-neon text-sm px-3 py-1 border-neon-pink text-neon-pink hover:bg-neon-pink"
+        >
+          <Plus className="w-4 h-4 inline mr-1" />
+          New Project
+        </motion.button>
+        
         <motion.button
           whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(0, 255, 255, 0.5)' }}
           whileTap={{ scale: 0.95 }}

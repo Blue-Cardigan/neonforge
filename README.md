@@ -4,7 +4,8 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
 
 ## ✨ Features
 
-- **🤖 AI-Powered Code Generation**: Chat with an AI assistant to generate and modify code
+- **🚀 New Project Creation**: Start with professional templates in seconds
+- **🤖 AI-Powered Code Generation**: Chat with Google Gemini to generate and modify code
 - **⚡ Real-time Preview**: See your changes instantly with WebContainer technology
 - **🎨 Cyberpunk Aesthetic**: Stunning neon-themed UI with smooth animations
 - **📁 File Explorer**: Navigate and edit your project files
@@ -12,10 +13,13 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
 - **🖥️ Responsive Preview**: Test your app in desktop, tablet, and mobile views
 - **📟 Terminal**: Monitor build processes and container status
 - **🔥 Hot Reload**: Instant updates as you code
+- **💬 Smart AI Chat**: Context-aware responses based on your current project
+- **🎯 Welcome Screen**: Guided onboarding and quick start options
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS
+- **AI**: Google Gemini 1.5 Flash for code generation
 - **Code Editor**: Monaco Editor (VS Code editor)
 - **Runtime**: WebContainers (browser-based Node.js environment)
 - **Animations**: Framer Motion
@@ -30,12 +34,26 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
    npm install
    ```
 
-2. **Start development server**:
+2. **Configure Gemini AI (Required for AI features)**:
+   - Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Edit `.env` and add your API key:
+     ```
+     VITE_GEMINI_API_KEY=your_actual_api_key_here
+     ```
+   - Alternatively, you can set the API key directly in the app interface
+
+3. **Start development server**:
    ```bash
    npm run dev
    ```
 
-3. **Open your browser** and navigate to the development URL
+4. **Open your browser** and navigate to the development URL
+
+5. **Start building!** Chat with the AI assistant to generate components and full applications
 
 ## 🎨 Design Philosophy
 

@@ -25,12 +25,15 @@ class GeminiService {
   }
 
   private initialize() {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY
+    // Try to get API key from environment first, then localStorage
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 
+                   (typeof window !== 'undefined' ? localStorage.getItem('VITE_GEMINI_API_KEY') : null)
+    
     if (apiKey) {
       this.genAI = new GoogleGenerativeAI(apiKey)
-      this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+      this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
     } else {
-      console.warn('Gemini API key not found. Set VITE_GEMINI_API_KEY in your environment.')
+      console.warn('Gemini API key not found. Set VITE_GEMINI_API_KEY in your environment or configure it in the app.')
     }
   }
 
@@ -135,6 +138,10 @@ Please generate the appropriate code files for this request. Make sure the respo
 
   isAvailable(): boolean {
     return this.model !== null
+  }
+  
+  reinitialize(): void {
+    this.initialize()
   }
 }
 

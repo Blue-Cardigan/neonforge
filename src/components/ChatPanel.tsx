@@ -63,11 +63,13 @@ const ChatPanel: React.FC = () => {
 
   const handleApiKeySubmit = () => {
     if (apiKey.trim()) {
-      // Set the API key in environment (this would typically be done differently in production)
+      // Set the API key in localStorage
       localStorage.setItem('VITE_GEMINI_API_KEY', apiKey.trim())
       
-      // Reinitialize the service
-      window.location.reload() // Simple way to reinitialize - in production you'd do this more elegantly
+      // Reinitialize the Gemini service
+      geminiService.reinitialize()
+      
+      addChatMessage('assistant', '✅ API key configured successfully! I\'m ready to help you build amazing applications.')
     }
     setShowApiKeyInput(false)
     setApiKey('')

@@ -12,4 +12,8 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@webcontainer/api'],
   },
+  define: {
+    // Expose environment variables to the client
+    'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(process.env.VITE_GEMINI_API_KEY),
+  },
 })

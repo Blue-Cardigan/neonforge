@@ -6,10 +6,16 @@ import CodeEditor from './components/CodeEditor'
 import Preview from './components/Preview'
 import Terminal from './components/Terminal'
 import ChatPanel from './components/ChatPanel'
+import NewProjectModal from './components/NewProjectModal'
+import WelcomeScreen from './components/WelcomeScreen'
 import { useWebContainer } from './hooks/useWebContainer'
+import { useAppStore } from './store'
 
 function App() {
   useWebContainer()
+  const { showNewProjectModal, setShowNewProjectModal, createNewProject, files } = useAppStore()
+  
+  const hasProject = Object.keys(files).length > 0
 
   return (
     <div className="h-screen w-screen bg-cyber-darker text-white overflow-hidden cyber-grid">
@@ -47,30 +53,44 @@ function App() {
       <div className="flex flex-col h-full relative z-10">
         <Header />
         
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          
-          <div className="flex-1 flex flex-col">
-            <div className="flex flex-1 overflow-hidden">
-              <div className="flex-1 flex flex-col">
-                <CodeEditor />
-                <Terminal />
-              </div>
-              
-              <div className="w-1/2 flex flex-col">
-                <Preview />
+        {hasProject ? (
+          <div className="flex flex-1 overflow-hidden">
+            <Sidebar />
+            
+            <div className="flex-1 flex flex-col">
+              <div className="flex flex-1 overflow-hidden">
+                <div className="flex-1 flex flex-col">
+                  <CodeEditor />
+                  <Terminal />
+                </div>
+                
+                <div className="w-1/2 flex flex-col">
+                  <Preview />
+                </div>
               </div>
             </div>
+            
+            <ChatPanel />
           </div>
-          
-          <ChatPanel />
-        </div>
+        ) : (
+          <div className="flex flex-1">
+            <WelcomeScreen />
+            <ChatPanel />
+          </div>
+        )}
       </div>
       
       {/* Scanline effect */}
       <div className="fixed inset-0 pointer-events-none opacity-20">
         <div className="scanline w-full h-full" />
       </div>
+      
+      {/* New Project Modal */}
+      <NewProjectModal
+        isOpen={showNewProjectModal}
+        onClose={() => setShowNewProjectModal(false)}
+        onCreateProject={createNewProject}
+      />
     </div>
   )
 }

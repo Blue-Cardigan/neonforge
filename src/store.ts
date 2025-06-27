@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { WebContainer } from '@webcontainer/api'
 import { geminiService, type GeneratedCode } from './utils/geminiService'
+import type { ProjectTemplate } from './templates/projectTemplates'
 
 export interface FileSystemNode {
   [key: string]: {
@@ -25,6 +26,7 @@ interface AppState {
   isGenerating: boolean
   prompt: string
   chatHistory: Array<{ role: 'user' | 'assistant'; content: string }>
+  showNewProjectModal: boolean
   
   // Terminal state
   terminalOutput: string[]
@@ -43,6 +45,8 @@ interface AppState {
   clearTerminal: () => void
   generateCodeWithAI: (prompt: string) => Promise<void>
   installDependencies: (dependencies: string[]) => Promise<void>
+  createNewProject: (template: ProjectTemplate, projectName: string) => Promise<void>
+  setShowNewProjectModal: (show: boolean) => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -56,6 +60,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   prompt: '',
   chatHistory: [],
   terminalOutput: [],
+  showNewProjectModal: false,
   
   // Actions
   setWebContainer: (container) => set({ webcontainer: container }),
@@ -220,4 +225,107 @@ export const useAppStore = create<AppState>((set, get) => ({
       addTerminalOutput(`❌ Failed to install dependencies: ${error}`)
     }
   },
+  
+  createNewProject: async (template: ProjectTemplate, projectName: string) => {
+    const { webcontainer, addTerminalOutput, setFiles, setActiveFile } = get()
+    
+    try {
+      addTerminalOutput(`🚀 Creating new project: ${projectName}...`)
+      addTerminalOutput(`📋 Using template: ${template.name}`)
+      
+      if (!webcontainer) {
+        addTerminalOutput('❌ WebContainer not ready')
+        return
+      }
+      
+      // Clear current project
+      addTerminalOutput('🧹 Clearing workspace...')
+      
+      // Convert template files to FileSystemNode format
+      const newFiles: FileSystemNode = {}
+      
+      Object.entries(template.files).forEach(([path, content]) => {
+        const pathParts = path.split('/')
+        let current = newFiles
+        
+        // Create directory structure
+        for (let i = 0; i < pathParts.length - 1; i++) {
+          const part = pathParts[i]
+          if (!current[part]) {
+            current[part] = { directory: {} }
+          }
+          current = current[part].directory!
+        }
+        
+        // Add file
+        const fileName = pathParts[pathParts.length - 1]
+        current[fileName] = {
+          file: { contents: content }
+        }
+      })
+      
+      // Update store files
+      setFiles(newFiles)
+      
+      // Write files to WebContainer
+      addTerminalOutput('📁 Setting up file structure...')
+      
+      for (const [path, content] of Object.entries(template.files)) {
+        try {
+          // Ensure directory exists
+          const dirPath = path.split('/').slice(0, -1).join('/')
+          if (dirPath) {
+            await webcontainer.fs.mkdir(dirPath, { recursive: true })
+          }
+          
+          await webcontainer.fs.writeFile(path, content)
+          addTerminalOutput(`✅ Created ${path}`)
+        } catch (error) {
+          addTerminalOutput(`❌ Failed to create ${path}: ${error}`)
+        }
+      }
+      
+      // Install dependencies
+      if (template.dependencies.length > 0 || template.devDependencies.length > 0) {
+        const allDeps = [...template.dependencies, ...template.devDependencies.map(d => `${d}`)]
+        addTerminalOutput('📦 Installing dependencies...')
+        
+        const installProcess = await webcontainer.spawn('npm', ['install'])
+        
+        installProcess.output.pipeTo(new WritableStream({
+          write(data) {
+            addTerminalOutput(data)
+          }
+        }))
+        
+        await installProcess.exit
+      }
+      
+      // Start development server
+      addTerminalOutput('🔥 Starting development server...')
+      const devProcess = await webcontainer.spawn('npm', ['run', 'dev'])
+      
+      devProcess.output.pipeTo(new WritableStream({
+        write(data) {
+          addTerminalOutput(data)
+        }
+      }))
+      
+      // Set active file to App component or main file
+      const mainFile = template.files['src/App.tsx'] ? 'src/App.tsx' : 
+                      template.files['src/app/page.tsx'] ? 'src/app/page.tsx' :
+                      Object.keys(template.files)[0]
+      
+      setActiveFile(mainFile)
+      
+      addTerminalOutput(`🎉 Project "${projectName}" created successfully!`)
+      addTerminalOutput(`📝 Active file: ${mainFile}`)
+      
+    } catch (error) {
+      console.error('Project creation error:', error)
+      addTerminalOutput(`❌ Failed to create project: ${error}`)
+    }
+  },
+  
+  setShowNewProjectModal: (show: boolean) => set({ showNewProjectModal: show }),
 }))
