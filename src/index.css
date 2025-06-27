@@ -1,0 +1,80 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  
+  body {
+    @apply bg-cyber-darker text-white font-mono;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+  }
+  
+  .neon-border {
+    border: 1px solid transparent;
+    background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scanline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+    animation: scan 3s linear infinite;
+    z-index: 1;
+  }
+  
+  .terminal-cursor::after {
+    content: '▋';
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+}
+
+@layer components {
+  .btn-neon {
+    @apply px-4 py-2 bg-transparent border border-neon-cyan text-neon-cyan 
+           font-semibold uppercase tracking-wider transition-all duration-300
+           hover:bg-neon-cyan hover:text-cyber-dark hover:shadow-lg;
+    text-shadow: 0 0 5px currentColor;
+    box-shadow: 0 0 5px currentColor;
+  }
+  
+  .btn-neon:hover {
+    box-shadow: 0 0 20px currentColor, inset 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+  
+  .input-neon {
+    @apply bg-cyber-dark border border-neon-cyan/50 text-white px-3 py-2
+           focus:border-neon-cyan focus:outline-none focus:ring-1 focus:ring-neon-cyan/50;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  }
+  
+  .panel-cyber {
+    @apply bg-cyber-gray/50 border border-neon-cyan/30 backdrop-blur-sm;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+}
