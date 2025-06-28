@@ -4,7 +4,7 @@ import { Zap, Github, Download, Play, Plus } from 'lucide-react'
 import { useAppStore } from '../store'
 
 const Header: React.FC = () => {
-  const { isContainerReady, serverUrl, setShowNewProjectModal } = useAppStore()
+  const { isContainerReady, serverUrl, setShowNewProjectModal, setShowGitHubModal } = useAppStore()
 
   return (
     <motion.header
@@ -69,6 +69,7 @@ const Header: React.FC = () => {
         <motion.button
           whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(0, 255, 0, 0.5)' }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => setShowGitHubModal(true)}
           className="btn-neon text-sm px-3 py-1 border-neon-green text-neon-green hover:bg-neon-green"
         >
           <Github className="w-4 h-4 inline mr-1" />

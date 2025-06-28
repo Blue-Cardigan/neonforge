@@ -27,6 +27,7 @@ interface AppState {
   prompt: string
   chatHistory: Array<{ role: 'user' | 'assistant'; content: string }>
   showNewProjectModal: boolean
+  showGitHubModal: boolean
   
   // Terminal state
   terminalOutput: string[]
@@ -47,6 +48,7 @@ interface AppState {
   installDependencies: (dependencies: string[]) => Promise<void>
   createNewProject: (template: ProjectTemplate, projectName: string) => Promise<void>
   setShowNewProjectModal: (show: boolean) => void
+  setShowGitHubModal: (show: boolean) => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -61,6 +63,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   chatHistory: [],
   terminalOutput: [],
   showNewProjectModal: false,
+  showGitHubModal: false,
   
   // Actions
   setWebContainer: (container) => set({ webcontainer: container }),
@@ -328,4 +331,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
   
   setShowNewProjectModal: (show: boolean) => set({ showNewProjectModal: show }),
+  
+  setShowGitHubModal: (show: boolean) => set({ showGitHubModal: show }),
 }))

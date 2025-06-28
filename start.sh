@@ -9,8 +9,9 @@ cd /Users/cardigan/Desktop/NeonForge
 if [ ! -f .env ]; then
     echo "🔑 Creating .env file from template..."
     cp .env.example .env
-    echo "⚠️  Please edit .env and add your Gemini API key!"
-    echo "🔗 Get your API key from: https://makersuite.google.com/app/apikey"
+    echo "⚠️  Please edit .env and add your service credentials!"
+    echo "🤖 Gemini API key: https://makersuite.google.com/app/apikey"
+    echo "📋 Supabase project: https://supabase.com"
 else
     echo "✅ .env file found"
 fi
@@ -26,4 +27,5 @@ npm run dev
 echo "✅ NeonForge is running!"
 echo "🌐 Open your browser to the localhost URL shown above"
 echo "⚡ The WebContainer will boot automatically and provide full functionality"
-echo "🤖 Don't forget to configure your Gemini API key for AI features!"
+echo "🤖 Configure Gemini API key for AI features"
+echo "📂 Configure Supabase for GitHub integration"

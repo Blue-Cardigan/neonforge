@@ -5,6 +5,7 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
 ## ✨ Features
 
 - **🚀 New Project Creation**: Start with professional templates in seconds
+- **📂 GitHub Integration**: Import repositories and export projects seamlessly
 - **🤖 AI-Powered Code Generation**: Chat with Google Gemini to generate and modify code
 - **⚡ Real-time Preview**: See your changes instantly with WebContainer technology
 - **🎨 Cyberpunk Aesthetic**: Stunning neon-themed UI with smooth animations
@@ -15,11 +16,14 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
 - **🔥 Hot Reload**: Instant updates as you code
 - **💬 Smart AI Chat**: Context-aware responses based on your current project
 - **🎯 Welcome Screen**: Guided onboarding and quick start options
+- **🔐 Secure Authentication**: Supabase-powered OAuth for GitHub
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS
 - **AI**: Google Gemini 1.5 Flash for code generation
+- **Authentication**: Supabase for GitHub OAuth
+- **Version Control**: GitHub API integration via Octokit
 - **Code Editor**: Monaco Editor (VS Code editor)
 - **Runtime**: WebContainers (browser-based Node.js environment)
 - **Animations**: Framer Motion
@@ -34,17 +38,20 @@ A cutting-edge, cyberpunk-themed AI code generation platform inspired by Lovable
    npm install
    ```
 
-2. **Configure Gemini AI (Required for AI features)**:
-   - Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. **Configure Services (Required for full functionality)**:
+   - **Gemini AI**: Get API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - **Supabase**: Create project at [supabase.com](https://supabase.com) for GitHub integration
    - Copy `.env.example` to `.env`:
      ```bash
      cp .env.example .env
      ```
-   - Edit `.env` and add your API key:
+   - Edit `.env` and add your credentials:
      ```
-     VITE_GEMINI_API_KEY=your_actual_api_key_here
+     VITE_GEMINI_API_KEY=your_gemini_api_key_here
+     VITE_SUPABASE_URL=your_supabase_url_here
+     VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
      ```
-   - Alternatively, you can set the API key directly in the app interface
+   - For GitHub integration, configure GitHub OAuth in your Supabase project
 
 3. **Start development server**:
    ```bash
